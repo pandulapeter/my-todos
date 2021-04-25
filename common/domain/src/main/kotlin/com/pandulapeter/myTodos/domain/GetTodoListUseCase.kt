@@ -5,5 +5,5 @@ import com.pandulapeter.myTodos.repository.TodoListRepository
 class GetTodoListUseCase(
     private val todoListRepository: TodoListRepository
 ) {
-    operator fun invoke() = todoListRepository.getTodoList()
+    operator fun invoke(shouldUseRemoteSource: Boolean) = todoListRepository.getTodoList(shouldUseRemoteSource)
 }

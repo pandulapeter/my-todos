@@ -8,5 +8,9 @@ internal class TodoListRepositoryImpl(
     private val todoListRemoteSource: TodoListRemoteSource
 ) : TodoListRepository {
 
-    override fun getTodoList() = todoListLocalSource.getTodoList()
+    override fun getTodoList(shouldUseRemoteSource: Boolean) = if (shouldUseRemoteSource) {
+        todoListRemoteSource.getTodoList()
+    } else {
+        todoListLocalSource.getTodoList()
+    }
 }

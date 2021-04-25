@@ -4,5 +4,5 @@ import com.pandulapeter.myTodos.model.TodoList
 
 interface TodoListRepository {
 
-    fun getTodoList(): TodoList
+    fun getTodoList(shouldUseRemoteSource: Boolean): TodoList
 }

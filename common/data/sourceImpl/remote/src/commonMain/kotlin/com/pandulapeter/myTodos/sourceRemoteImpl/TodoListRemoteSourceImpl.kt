@@ -9,7 +9,7 @@ internal class TodoListRemoteSourceImpl(
 
     override fun getTodoList() = object : TodoList {
 
-        override val content = "${getPlatformName()} (${networkingManager.verify()})"
+        override val content = "${getPlatformName()} (${networkingManager.getEngineName()})"
     }
 }
 

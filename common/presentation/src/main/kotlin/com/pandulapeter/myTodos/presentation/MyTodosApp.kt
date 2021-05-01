@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -32,6 +34,7 @@ fun MyTodosApp(
     getTodoList: GetTodoListUseCase = get()
 ) {
     var shouldUseRemoteSource by remember { mutableStateOf(false) }
+    var selectedDemo by remember { mutableStateOf(Demo.DEMO_1) }
 
     MaterialTheme(
         colors = lightColors(
@@ -51,13 +54,31 @@ fun MyTodosApp(
                 )
         ) {
             Title()
-            SourceSelector(
-                shouldUseRemoteSource = shouldUseRemoteSource,
-                onShouldUseRemoteSourceChanged = { shouldUseRemoteSource = it }
+            TabLayout(
+                demos = Demo.values().toList(),
+                selectedDemo = selectedDemo,
+                onSelectionChanged = { selectedDemo = it }
             )
-            Content(
-                todoList = getTodoList(shouldUseRemoteSource)
-            )
+            when (selectedDemo) {
+                Demo.DEMO_1 -> {
+                    SourceSelector(
+                        shouldUseRemoteSource = shouldUseRemoteSource,
+                        onShouldUseRemoteSourceChanged = { shouldUseRemoteSource = it }
+                    )
+                    Content(
+                        todoList = getTodoList(shouldUseRemoteSource)
+                    )
+                }
+                Demo.DEMO_2 -> {
+                    Text(
+                        text = "Work in progress",
+                        modifier = Modifier
+                            .padding(Dimension.contentPadding)
+                            .padding(top = Dimension.contentPaddingExtraLarge)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
         }
     }
 }
@@ -70,6 +91,37 @@ private fun Title() = Text(
         .padding(top = Dimension.contentPaddingExtraLarge),
     style = MaterialTheme.typography.h2.copy(color = Color.brand),
     textAlign = TextAlign.Center
+)
+
+private enum class Demo(val title: String) {
+    DEMO_1(Text.demo1),
+    DEMO_2(Text.demo2)
+}
+
+@Composable
+private fun TabLayout(
+    demos: List<Demo>,
+    selectedDemo: Demo,
+    onSelectionChanged: (Demo) -> Unit
+) = TabRow(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = Dimension.contentPaddingExtraLarge),
+    tabs = {
+        demos.forEach { demo ->
+            Tab(
+                selected = selectedDemo == demo,
+                onClick = { onSelectionChanged(demo) },
+                content = {
+                    Text(
+                        text = demo.title,
+                        modifier = Modifier.padding(Dimension.contentPadding)
+                    )
+                }
+            )
+        }
+    },
+    selectedTabIndex = demos.indexOf(selectedDemo)
 )
 
 @Composable

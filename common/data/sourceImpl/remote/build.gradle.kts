@@ -11,6 +11,17 @@ kotlin {
                 implementation(Dependencies.koin)
                 implementation(project(Modules.dataModel))
                 implementation(project(Modules.dataSourceRemote))
+                implementation(Dependencies.ktor)
+            }
+        }
+        named("androidMain") {
+            dependencies {
+                 implementation(Dependencies.androidKtor)
+            }
+        }
+        named("desktopMain") {
+            dependencies {
+                 implementation(Dependencies.desktopKtor)
             }
         }
     }

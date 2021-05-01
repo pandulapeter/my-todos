@@ -4,5 +4,6 @@ import com.pandulapeter.myTodos.sourceRemote.TodoListRemoteSource
 import org.koin.dsl.module
 
 val remoteSourceModule = module {
-    factory<TodoListRemoteSource> { TodoListRemoteSourceImpl() }
+    single { NetworkingManager() }
+    factory<TodoListRemoteSource> { TodoListRemoteSourceImpl(get()) }
 }

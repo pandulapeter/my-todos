@@ -1,6 +1,6 @@
 package com.pandulapeter.myTodos
 
-import MyTodosApp
+import com.pandulapeter.myTodos.presentation.MyTodosApp
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity

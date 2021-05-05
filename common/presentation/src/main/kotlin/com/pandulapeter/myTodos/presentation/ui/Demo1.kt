@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
@@ -17,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import com.pandulapeter.myTodos.domain.GetTodoListUseCase
 import com.pandulapeter.myTodos.model.TodoList
 import com.pandulapeter.myTodos.presentation.resources.Dimension
@@ -66,19 +69,25 @@ private fun RowScope.LabeledRadioButton(
     value: Boolean,
     onValueChanged: () -> Unit
 ) {
-    RadioButton(
-        modifier = Modifier.align(Alignment.CenterVertically),
-        selected = value,
-        onClick = onValueChanged,
-    )
-    Spacer(modifier = Modifier.size(Dimension.contentPadding))
-    Text(
+    Row(
         modifier = Modifier
+            .clip(RoundedCornerShape(corner = CornerSize(Dimension.contentPaddingLarge)))
             .clickable(onClick = onValueChanged)
-            .padding(all = Dimension.contentPadding)
-            .align(Alignment.CenterVertically),
-        text = text
-    )
+            .padding(Dimension.contentPadding),
+    ) {
+        RadioButton(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            selected = value,
+            onClick = null
+        )
+        Spacer(modifier = Modifier.size(Dimension.contentPadding))
+        Text(
+            modifier = Modifier
+                .padding(all = Dimension.contentPadding)
+                .align(Alignment.CenterVertically),
+            text = text
+        )
+    }
 }
 
 @Composable

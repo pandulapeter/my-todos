@@ -1,10 +1,10 @@
 package com.pandulapeter.myTodos.presentation.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import com.pandulapeter.myTodos.domain.GetTodoListUseCase
 import com.pandulapeter.myTodos.model.TodoList
 import com.pandulapeter.myTodos.presentation.resources.Dimension
@@ -27,8 +28,8 @@ import com.pandulapeter.myTodos.presentation.resources.Text
 import com.pandulapeter.myTodos.presentation.utilities.get
 
 @Composable
-internal fun ColumnScope.Demo1(
-    getTodoList: GetTodoListUseCase = get()
+internal fun Demo1(
+    getTodoList: GetTodoListUseCase = get(),
 ) {
     var shouldUseRemoteSource by remember { mutableStateOf(false) }
 
@@ -42,13 +43,15 @@ internal fun ColumnScope.Demo1(
 }
 
 @Composable
-private fun ColumnScope.SourceSelector(
+private fun SourceSelector(
     shouldUseRemoteSource: Boolean,
-    onShouldUseRemoteSourceChanged: (Boolean) -> Unit
+    onShouldUseRemoteSourceChanged: (Boolean) -> Unit,
 ) = Row(
     modifier = Modifier
-        .align(Alignment.CenterHorizontally)
+        .fillMaxWidth()
         .padding(top = Dimension.contentPaddingExtraLarge),
+    horizontalArrangement = Arrangement.Center,
+    verticalAlignment = Alignment.CenterVertically
 ) {
     LabeledRadioButton(
         text = Text.localSource,
@@ -64,10 +67,10 @@ private fun ColumnScope.SourceSelector(
 }
 
 @Composable
-private fun RowScope.LabeledRadioButton(
+private fun LabeledRadioButton(
     text: String,
     value: Boolean,
-    onValueChanged: () -> Unit
+    onValueChanged: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -91,12 +94,13 @@ private fun RowScope.LabeledRadioButton(
 }
 
 @Composable
-private fun ColumnScope.Content(todoList: TodoList) {
+private fun Content(todoList: TodoList) {
     Text(
         text = todoList.content,
         modifier = Modifier
-            .align(Alignment.CenterHorizontally)
+            .fillMaxWidth()
             .padding(top = Dimension.contentPaddingLarge),
+        textAlign = TextAlign.Center,
         style = MaterialTheme.typography.body2
     )
 }

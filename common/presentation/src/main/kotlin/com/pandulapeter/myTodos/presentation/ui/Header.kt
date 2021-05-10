@@ -1,5 +1,6 @@
 package com.pandulapeter.myTodos.presentation.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -18,14 +19,16 @@ import com.pandulapeter.myTodos.presentation.resources.Text
 internal fun Header(
     demos: List<Demo>,
     selectedDemo: Demo,
-    onSelectionChanged: (Demo) -> Unit
+    onSelectionChanged: (Demo) -> Unit,
 ) {
-    Title()
-    TabLayout(
-        demos = demos,
-        selectedDemo = selectedDemo,
-        onSelectionChanged = onSelectionChanged
-    )
+    Column {
+        Title()
+        TabLayout(
+            demos = demos,
+            selectedDemo = selectedDemo,
+            onSelectionChanged = onSelectionChanged
+        )
+    }
 }
 
 @Composable
@@ -42,7 +45,7 @@ private fun Title() = Text(
 private fun TabLayout(
     demos: List<Demo>,
     selectedDemo: Demo,
-    onSelectionChanged: (Demo) -> Unit
+    onSelectionChanged: (Demo) -> Unit,
 ) = TabRow(
     modifier = Modifier
         .fillMaxWidth()

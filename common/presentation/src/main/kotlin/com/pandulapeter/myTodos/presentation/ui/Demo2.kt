@@ -1,11 +1,13 @@
 package com.pandulapeter.myTodos.presentation.ui
 
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,38 +20,28 @@ import com.pandulapeter.myTodos.model.Issue
 import com.pandulapeter.myTodos.presentation.resources.Dimension
 import com.pandulapeter.myTodos.presentation.resources.Text
 import com.pandulapeter.myTodos.presentation.utilities.get
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Composable
-internal fun ColumnScope.Demo2(
-    getIssues: GetIssuesUseCase = get()
+internal fun Demo2(
+    getIssues: GetIssuesUseCase = get(),
 ) {
     var issues by remember { mutableStateOf<ResultWrapper<List<Issue>>?>(null) }
+    var retry by remember { mutableStateOf(Any()) }
 
-    fun loadIssues() {
-        issues = null
-        GlobalScope.launch {
-            val newIssues = getIssues()
-            launch(Dispatchers.Main) {
-                issues = newIssues
-            }
-        }
+    LaunchedEffect(getIssues, retry) {
+        issues = getIssues()
     }
 
-    when (val currentIssues = issues) {
-        null -> {
-            LoadingIndicator()
-            loadIssues()
-        }
-        is ResultWrapper.Error -> {
-            ErrorState(
-                onTryAgainButtonPressed = ::loadIssues
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        when (val currentIssues = issues) {
+            null -> LoadingIndicator()
+            is ResultWrapper.Error -> ErrorState(
+                onTryAgainButtonPressed = { issues = null; retry = Any() }
             )
-        }
-        is ResultWrapper.Success -> {
-            IdleState(
+            is ResultWrapper.Success -> IdleState(
                 issues = currentIssues.data
             )
         }
@@ -57,41 +49,37 @@ internal fun ColumnScope.Demo2(
 }
 
 @Composable
-private fun ColumnScope.LoadingIndicator() = CircularProgressIndicator(
+private fun LoadingIndicator(
+    modifier: Modifier = Modifier,
+) = CircularProgressIndicator(
     modifier = Modifier
         .padding(top = Dimension.contentPaddingExtraLarge)
-        .align(Alignment.CenterHorizontally)
+        .then(modifier)
 )
 
 @Composable
-private fun ColumnScope.ErrorState(
-    onTryAgainButtonPressed: () -> Unit
+private fun ErrorState(
+    onTryAgainButtonPressed: () -> Unit,
 ) {
     Text(
         text = Text.somethingWentWrong,
         modifier = Modifier
             .padding(top = Dimension.contentPaddingExtraLarge)
-            .align(Alignment.CenterHorizontally)
     )
     Button(
-        content = {
-            Text(
-                text = Text.tryAgain
-            )
-        },
+        onClick = onTryAgainButtonPressed,
         modifier = Modifier
-            .padding(top = Dimension.contentPaddingExtraLarge)
-            .align(Alignment.CenterHorizontally),
-        onClick = onTryAgainButtonPressed
-    )
+            .padding(top = Dimension.contentPaddingExtraLarge),
+    ) {
+        Text(text = Text.tryAgain)
+    }
 }
 
 @Composable
-private fun ColumnScope.IdleState(
-    issues: List<Issue>
+private fun IdleState(
+    issues: List<Issue>,
 ) = Text(
     text = if (issues.isEmpty()) Text.issuesEmpty else "${issues.size}${Text.issuesIdle}",
     modifier = Modifier
         .padding(top = Dimension.contentPaddingExtraLarge)
-        .align(Alignment.CenterHorizontally)
 )

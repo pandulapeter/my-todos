@@ -1,8 +1,7 @@
 package com.pandulapeter.myTodos.presentation.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,12 +19,8 @@ internal fun DemoPicker() {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(
-                start = Dimension.sidePadding,
-                end = Dimension.sidePadding
-            ),
+            .fillMaxSize()
+            .padding(horizontal = Dimension.sidePadding),
         content = {
             Header(
                 demos = Demo.values().toList(),
